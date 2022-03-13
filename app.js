@@ -1,7 +1,27 @@
 let express = require('express');
 //const { route } = require('express/lib/application'); --> 이게 뭐지? 갑자기 생김
 let app = express();
+app.locals.pretty = true;
+app.set('view engine', 'pug');
+app.set('views','./views');
 app.use(express.static('public'));
+app.get('/template',function(req,res){
+    res.render('temp',{time: Date(), _title:'PUG'});
+});
+app.get('/topic',function(req,res){
+    let topics = [
+        'javascript is ...',
+        'nodejs is...',
+        'express is...'
+    ];
+    let output =`
+    <a href="/topic?id=0">Javasctipt</a><br>
+    <a href="/topic?id=1">Nodejs</a><br>
+    <a href="/topic?id=2">Express</a><br>
+    ${topics[req.query.id]}
+    `
+    res.send(output);
+})
 app.get('/',function(req, res){
     res.send('Hello home page');
 }); //get과 같은 것들을 라우터라고 부르고 길을 찾아주는 역할(중개)
